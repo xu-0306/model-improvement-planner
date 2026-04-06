@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Training Plan",
+  "description": "Schema-light contract for training plans covering objective choice, suitability, and rollback conditions.",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "contract": {
+      "type": "string",
+      "const": "training_plan"
+    },
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_capability": {
+      "type": "string",
+      "minLength": 1
+    },
+    "intervention_family": {
+      "type": "string",
+      "minLength": 1
+    },
+    "implementation_candidates": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rejected_alternatives": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "supervision_shape": {
+      "type": "string",
+      "minLength": 1
+    },
+    "teacher_plan": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "data_plan": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "evaluation_plan": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "base_model_suitability_verdict": {
+      "type": "string",
+      "minLength": 1
+    },
+    "training_stack_suitability_verdict": {
+      "type": "string",
+      "minLength": 1
+    },
+    "serving_compatibility_notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "compute_assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "stop_criteria": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rollback_criteria": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "expected_failure_modes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "contract",
+    "schema_version",
+    "target_capability",
+    "intervention_family",
+    "implementation_candidates",
+    "rejected_alternatives",
+    "supervision_shape",
+    "teacher_plan",
+    "data_plan",
+    "evaluation_plan",
+    "base_model_suitability_verdict",
+    "training_stack_suitability_verdict",
+    "serving_compatibility_notes",
+    "compute_assumptions",
+    "stop_criteria",
+    "rollback_criteria",
+    "expected_failure_modes"
+  ]
+}

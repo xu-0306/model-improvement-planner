@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Teacher Loop Plan",
+  "description": "Schema-light contract for ordered teacher-role loops that export critiques, corrections, preferences, verifications, or distilled targets.",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "contract": {
+      "type": "string",
+      "const": "teacher_loop_plan"
+    },
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_capability": {
+      "type": "string",
+      "minLength": 1
+    },
+    "loop_goal": {
+      "type": "string",
+      "minLength": 1
+    },
+    "selected_teacher_roles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "loop_order": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "step_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "teacher_role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "purpose": {
+            "type": "string",
+            "minLength": 1
+          },
+          "emits": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "step_id",
+          "teacher_role",
+          "purpose",
+          "emits"
+        ]
+      }
+    },
+    "input_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "output_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "export_strategy": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": true
+    },
+    "quality_gates": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "stop_conditions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "open_questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "contract",
+    "schema_version",
+    "target_capability",
+    "loop_goal",
+    "selected_teacher_roles",
+    "loop_order",
+    "input_artifacts",
+    "output_artifacts",
+    "export_strategy",
+    "quality_gates",
+    "stop_conditions",
+    "open_questions"
+  ]
+}

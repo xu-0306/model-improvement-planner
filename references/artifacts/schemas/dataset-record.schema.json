@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Dataset Record",
+  "description": "Schema-light dataset record for teacher-student optimization data across multiple supervision shapes.",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "contract": {
+      "type": "string",
+      "const": "dataset_record"
+    },
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array"
+        },
+        {
+          "type": "object",
+          "additionalProperties": true
+        }
+      ]
+    },
+    "target": {},
+    "candidates": {
+      "type": "array"
+    },
+    "supervision": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "evidence": {},
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "dataset_mode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "capability_family": {
+          "type": "string",
+          "minLength": 1
+        },
+        "supervision_shape": {
+          "type": "string",
+          "minLength": 1
+        },
+        "teacher_role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "teacher_roles": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "evaluator_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rubric_reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "difficulty": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "source_provenance": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "minItems": 1
+            },
+            {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": true
+            }
+          ]
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "dataset_mode",
+        "capability_family",
+        "supervision_shape",
+        "source_provenance"
+      ],
+      "anyOf": [
+        {
+          "required": [
+            "teacher_role"
+          ]
+        },
+        {
+          "required": [
+            "teacher_roles"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "contract",
+    "schema_version",
+    "input",
+    "metadata"
+  ],
+  "anyOf": [
+    {
+      "required": [
+        "target"
+      ]
+    },
+    {
+      "required": [
+        "candidates"
+      ]
+    },
+    {
+      "required": [
+        "supervision"
+      ]
+    }
+  ]
+}

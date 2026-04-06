@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Training Route Manifest",
+  "description": "Stable scaffold manifest emitted for a selected local training execution route.",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "contract": {
+      "type": "string",
+      "const": "training_route_manifest"
+    },
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "route_family": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_capability": {
+      "type": "string",
+      "minLength": 1
+    },
+    "training_plan_reference": {
+      "type": "string",
+      "minLength": 1
+    },
+    "intervention_family": {
+      "type": "string",
+      "minLength": 1
+    },
+    "trainer_stack": {
+      "type": "string",
+      "minLength": 1
+    },
+    "supervision_shape": {
+      "type": "string",
+      "minLength": 1
+    },
+    "implementation_candidates": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "required_dataset_kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "entrypoint": {
+      "type": "string",
+      "minLength": 1
+    },
+    "implementation_profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "profile_is_optional": {
+      "type": "boolean"
+    },
+    "bundled_profile_command_hint": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dataset_path": {
+      "type": "string"
+    },
+    "base_model": {
+      "type": "string"
+    },
+    "output_dir": {
+      "type": "string",
+      "minLength": 1
+    },
+    "base_model_suitability_verdict": {
+      "type": "string",
+      "minLength": 1
+    },
+    "training_stack_suitability_verdict": {
+      "type": "string",
+      "minLength": 1
+    },
+    "serving_compatibility_notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "stop_criteria": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rollback_criteria": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "expected_failure_modes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unresolved_gaps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "contract",
+    "schema_version",
+    "route_family",
+    "target_capability",
+    "training_plan_reference",
+    "intervention_family",
+    "trainer_stack",
+    "supervision_shape",
+    "implementation_candidates",
+    "required_dataset_kind",
+    "entrypoint",
+    "implementation_profile",
+    "profile_is_optional",
+    "bundled_profile_command_hint",
+    "dataset_path",
+    "base_model",
+    "output_dir",
+    "base_model_suitability_verdict",
+    "training_stack_suitability_verdict",
+    "serving_compatibility_notes",
+    "stop_criteria",
+    "rollback_criteria",
+    "expected_failure_modes",
+    "unresolved_gaps",
+    "status"
+  ]
+}

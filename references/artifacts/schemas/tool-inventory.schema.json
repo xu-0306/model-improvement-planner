@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tool Inventory",
+  "description": "Schema-light contract for route-relevant tool inventory artifacts discovered from the current workspace and session.",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "contract": {
+      "type": "string",
+      "const": "tool_inventory"
+    },
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inventory_scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workspace_root": {
+      "type": "string",
+      "minLength": 1
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "additionalProperties": true
+          }
+        ]
+      }
+    },
+    "mcp_servers": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "additionalProperties": true
+          }
+        ]
+      }
+    },
+    "mcp_resources": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "additionalProperties": true
+          }
+        ]
+      }
+    },
+    "local_scripts": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "additionalProperties": true
+          }
+        ]
+      }
+    },
+    "runtimes": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "additionalProperties": true
+          }
+        ]
+      }
+    },
+    "backend_adapters": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "network_capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "recommended_usage_notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "contract",
+    "schema_version",
+    "inventory_scope",
+    "workspace_root",
+    "skills",
+    "mcp_servers",
+    "mcp_resources",
+    "local_scripts",
+    "runtimes",
+    "backend_adapters",
+    "network_capabilities",
+    "constraints",
+    "recommended_usage_notes"
+  ]
+}

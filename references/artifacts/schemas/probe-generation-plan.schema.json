@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Probe Generation Plan",
+  "description": "Schema-light contract for capability-specific probe planning artifacts used before baseline execution.",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "contract": {
+      "type": "string",
+      "const": "probe_generation_plan"
+    },
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_capability": {
+      "type": "string",
+      "minLength": 1
+    },
+    "planning_scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "probe_families": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "generation_rationale": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "teacher_roles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evaluation_modes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "target_modalities": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "input": {
+          "type": "array"
+        },
+        "output": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "input",
+        "output"
+      ]
+    },
+    "target_languages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "probe_blueprints": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "additionalProperties": true
+          }
+        ]
+      }
+    },
+    "acceptance_signals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "known_limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "contract",
+    "schema_version",
+    "target_capability",
+    "planning_scope",
+    "probe_families",
+    "generation_rationale",
+    "teacher_roles",
+    "evaluation_modes",
+    "target_modalities",
+    "target_languages",
+    "probe_blueprints",
+    "acceptance_signals",
+    "known_limitations"
+  ]
+}

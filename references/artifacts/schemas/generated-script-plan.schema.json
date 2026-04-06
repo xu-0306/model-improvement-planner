@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Generated Script Plan",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "contract": {
+      "type": "string",
+      "const": "generated_script_plan"
+    },
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_capability": {
+      "type": "string",
+      "minLength": 1
+    },
+    "plan_status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "selected_flow_kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "capability_intake_reference": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evaluation_plan_reference": {
+      "type": "string",
+      "minLength": 1
+    },
+    "environment_discovery_reference": {
+      "type": "string",
+      "minLength": 1
+    },
+    "training_plan_reference": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dataset_strategy": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": true
+    },
+    "script_plan": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "script_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "script_kind": {
+            "type": "string",
+            "minLength": 1
+          },
+          "purpose": {
+            "type": "string",
+            "minLength": 1
+          },
+          "inputs": {
+            "type": "array"
+          },
+          "outputs": {
+            "type": "array"
+          },
+          "status": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "script_id",
+          "path",
+          "script_kind",
+          "purpose",
+          "inputs",
+          "outputs",
+          "status"
+        ]
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "unresolved_gaps": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "required": [
+    "contract",
+    "schema_version",
+    "target_capability",
+    "plan_status",
+    "selected_flow_kind",
+    "capability_intake_reference",
+    "evaluation_plan_reference",
+    "environment_discovery_reference",
+    "dataset_strategy",
+    "script_plan",
+    "assumptions",
+    "unresolved_gaps"
+  ]
+}

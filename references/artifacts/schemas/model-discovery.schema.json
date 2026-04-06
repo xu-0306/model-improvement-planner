@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Model Discovery Artifact",
+  "description": "Schema-light contract for normalized model discovery artifacts used before generating an external runtime scaffold.",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "contract": {
+      "type": "string",
+      "const": "model_discovery"
+    },
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "requested_runtime_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model_family_hint": {
+      "type": "string"
+    },
+    "checkpoint_format": {
+      "type": "string"
+    },
+    "tokenizer_format": {
+      "type": "string"
+    },
+    "expected_load_path": {
+      "type": "string"
+    },
+    "likely_inference_library": {
+      "type": "string"
+    },
+    "likely_training_library_or_status": {
+      "type": "string"
+    },
+    "device_runtime_assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "runtime_constraints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "missing_facts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "contract",
+    "schema_version",
+    "requested_runtime_id",
+    "model_family_hint",
+    "checkpoint_format",
+    "tokenizer_format",
+    "expected_load_path",
+    "likely_inference_library",
+    "likely_training_library_or_status",
+    "device_runtime_assumptions",
+    "runtime_constraints",
+    "missing_facts"
+  ]
+}

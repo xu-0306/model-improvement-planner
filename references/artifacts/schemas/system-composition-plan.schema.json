@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "System Composition Plan",
+  "description": "Schema-light contract for multi-component system composition plans around a local model.",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "contract": {
+      "type": "string",
+      "const": "system_composition_plan"
+    },
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_capability": {
+      "type": "string",
+      "minLength": 1
+    },
+    "system_goal": {
+      "type": "string",
+      "minLength": 1
+    },
+    "architecture_summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "additionalProperties": true
+          }
+        ]
+      }
+    },
+    "interfaces": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "additionalProperties": true
+          }
+        ]
+      }
+    },
+    "orchestration_summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "latency_implications": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "failure_handling": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "observability_requirements": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evaluation_plan": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "unresolved_gaps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "contract",
+    "schema_version",
+    "target_capability",
+    "system_goal",
+    "architecture_summary",
+    "components",
+    "interfaces",
+    "orchestration_summary",
+    "latency_implications",
+    "failure_handling",
+    "observability_requirements",
+    "evaluation_plan",
+    "unresolved_gaps"
+  ]
+}

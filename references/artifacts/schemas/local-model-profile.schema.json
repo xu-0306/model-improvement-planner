@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Local Model Profile",
+  "description": "Schema-light contract for local model inspection artifacts emitted before baseline probing.",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "contract": {
+      "type": "string",
+      "const": "local_model_profile"
+    },
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "profile_status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "architecture": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "tokenizer": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "generation": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "model_card": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "adapter_presence": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "family_hints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "language_hints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "capability_hints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "stack_hints": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "inspected_files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unresolved_facts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "contract",
+    "schema_version",
+    "model_id",
+    "model_path",
+    "profile_status",
+    "architecture",
+    "tokenizer",
+    "generation",
+    "model_card",
+    "adapter_presence",
+    "family_hints",
+    "language_hints",
+    "capability_hints",
+    "stack_hints",
+    "inspected_files",
+    "unresolved_facts"
+  ]
+}

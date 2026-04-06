@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Research Evidence",
+  "description": "Schema-light contract for research evidence artifacts used to justify route selection or deferral.",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "contract": {
+      "type": "string",
+      "const": "research_evidence"
+    },
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_capability": {
+      "type": "string",
+      "minLength": 1
+    },
+    "research_scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "additionalProperties": true
+          }
+        ]
+      }
+    },
+    "confirmed_facts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unresolved_facts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "route_implications": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unsupported_assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "recommended_followups": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "contract",
+    "schema_version",
+    "target_capability",
+    "research_scope",
+    "sources",
+    "confirmed_facts",
+    "unresolved_facts",
+    "route_implications",
+    "unsupported_assumptions",
+    "recommended_followups"
+  ]
+}

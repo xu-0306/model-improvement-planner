@@ -1,0 +1,11 @@
+{
+  "skills": [
+    "model-improvement-planner"
+  ],
+  "query": "My local assistant seems to stumble on any task that requires multi-step planning—figure out how to improve it.",
+  "expected_behavior": [
+    "Start with environment discovery and local model inspection before naming a method.",
+    "Generate and run baseline probes that highlight the planning weakness and summarize the probe results before routing.",
+    "Use the probe summary and evidence to diagnose the precise capability gap before recommending an intervention family."
+  ]
+}

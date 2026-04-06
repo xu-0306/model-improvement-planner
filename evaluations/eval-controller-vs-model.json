@@ -1,0 +1,11 @@
+{
+  "skills": [
+    "model-improvement-planner"
+  ],
+  "query": "My local model calls a web search tool but the tool results never appear in its answers—fix the tool-use failure.",
+  "expected_behavior": [
+    "Distinguish between a controller/runtime issue and a model capability issue instead of assuming the model is bad.",
+    "Run tool-use specific probes or diagnostics that expose whether the tool call payloads or controller orchestration is at fault.",
+    "If the evidence points to a runtime or controller failure, route toward fixing the controller or runtime rather than immediately scheduling training."
+  ]
+}
