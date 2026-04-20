@@ -1,183 +1,65 @@
 # Training Stack Selection
 
-Use this reference when the capability route includes training, adapter merging, verifier-driven optimization, or runtime-dependent serving constraints.
+Use this reference only after the intervention family is chosen and the route actually requires implementation work.
 
-## Goal
+## Decision Order
 
-Choose a stack that can actually support the selected intervention family, artifact format, and deployment target.
+Make these explicit before naming a stack:
 
-Do not select a training objective in isolation from the implementation stack.
+1. intervention family
+2. model architecture and checkpoint format
+3. target output form: full weights, adapter, merged weights, quantized export, or serving wrapper
+4. deployment target: local, server, edge, or custom runtime
+5. evaluation and observability needs
 
-## Routing Questions
+If any item is still unknown, stop and resolve that first.
 
-Answer these questions before naming a concrete stack:
+## Stack-Fit Matrix
 
-- Which intervention family was selected?
-- Does the route require full finetuning, PEFT, distillation, preference optimization, reward-driven optimization, or system composition?
-- What model format, tokenizer format, and checkpoint layout are actually available?
-- What hardware is available for training and serving?
-- Does the serving target require merged weights, adapters, quantized checkpoints, or a custom runtime bridge?
-- Does the route depend on verifier loops, trajectory logging, browser or tool environments, or multimodal components?
+| Stack shape | Good fit when | Poor fit when | Stop gate |
+| --- | --- | --- | --- |
+| General training framework (`Transformers` + `PEFT`-style components) | The route may change, architecture inspection matters, or you need a flexible baseline for SFT, distillation, or adapter work | You only chose it because it is familiar, not because it fits the model and output path | Stop if the architecture or checkpoint is not actually supported |
+| Ergonomic local PEFT stack (`Unsloth`-like) | The model family is supported, the route is mostly supervised or lightweight preference work, and fast local iteration matters | You need broad method coverage, unusual architectures, or research-heavy objectives | Stop if support for the exact model, tokenizer, or training mode is unclear |
+| Preference or RL trainer (`TRL`-like) | The route already needs comparison training or verifier-driven optimization, and the supervision signal is credible | The task still needs basic imitation learning or reward quality is weak | Stop if the stack cannot surface reward failures, logging, and regressions clearly |
+| Research or task-specific codebase | The route depends on model editing, advanced merging, self-play, or custom update logic not cleanly exposed in generic trainers | You are using research code to avoid a simpler supported route | Stop if the code path is not reproducible enough for the intended use |
+| Serving-first runtime (`vLLM`-like) | You need teacher generation, batched evaluation, or production inference throughput | You are confusing the serving runtime with the training stack | Stop if the serving runtime cannot load the required output form |
+| Edge or export-oriented runtime (`llama.cpp`-like) | Deployment needs compact local inference or a strict export format such as GGUF | The training route depends on outputs that do not export cleanly | Stop if export becomes the reason to pick a worse upstream training route |
+| Project-local or custom runtime | The host project already constrains loader, adapter, or packaging choices | The runtime is undocumented and would force unstable custom glue into the route | Stop if runtime fit cannot be evidenced before training |
 
-## Stack Capabilities
+## Route-to-Stack Rules
 
-Treat these as representative options, not a closed list.
+- `SFT`, `distillation`, and most adapter work usually start in a general training framework unless a narrower stack is already proven to fit.
+- Ergonomic local PEFT stacks are good for supported-model iteration, not for every family by default.
+- `preference_optimization` and `verifier_guided_rl` require stack support for comparisons, rollout logging, reward computation, and regression review.
+- `model_editing`, `model_merging`, and `self_play` often need research-grade code. Treat execution readiness as unproven until the exact method support is evidenced.
+- `rag_tuning` needs explicit handling of retrieved context, negatives, and grounding evaluation. Do not assume plain SFT plumbing already does that.
+- `continual_learning` needs replay, retention tracking, or teacher-retention support. Plain stage-two finetuning is not enough.
+- Serving and training can use different stacks. Separate "how to train" from "how to serve".
 
-### Hugging Face Transformers
+## Typical Situations
 
-Good fit when:
-
-- the route needs broad model-family support
-- the project needs flexible data pipelines
-- custom trainer logic or architecture inspection is required
-- the project may later branch into distillation, evaluation, or adapter work
-
-Watch for:
-
-- uneven support across new or custom architectures
-- large-memory full finetuning requirements
-- serving assumptions that differ from the eventual runtime
-
-### PEFT
-
-Good fit when:
-
-- the objective family is already chosen
-- the project needs LoRA, QLoRA-adjacent workflows, adapters, IA3, prompt tuning, or related parameter-efficient mechanisms
-- hardware is constrained and the base model is otherwise suitable
-
-Watch for:
-
-- treating PEFT as the objective instead of the mechanism
-- target-module mismatches across model families
-- serving stacks that cannot load the chosen adapter format cleanly
-
-### TRL
-
-Good fit when:
-
-- the route includes preference optimization or reward-driven optimization
-- the project needs DPO-family methods, reward models, PPO-style loops, or related trainer scaffolding
-
-Watch for:
-
-- weak or gameable evaluators
-- immature support for the chosen architecture or data shape
-- high operational overhead relative to a simpler supervised route
-
-### Unsloth
-
-Good fit when:
-
-- the project needs a pragmatic local finetuning path with strong PEFT ergonomics
-- supported model families and training modes already align with the target
-- fast iteration on supervised or selected preference workflows matters more than maximum framework generality
-
-Watch for:
-
-- assuming support for every architecture, tokenizer layout, or training method
-- assuming reward-driven or multimodal routes are equally mature
-- forgetting to confirm compatibility with the final serving stack
-
-### vLLM
-
-Good fit when:
-
-- the serving target needs high-throughput inference
-- the project needs batched teacher generation, evaluation, or rollout serving
-- the deployment path expects a production-oriented inference runtime
-
-Watch for:
-
-- assuming the serving runtime is also the best training stack
-- adapter or quantization support mismatches
-- feature gaps for custom tool, verifier, or multimodal integrations
-
-### llama.cpp
-
-Good fit when:
-
-- the deployment target is edge, CPU-heavy, or strongly quantized
-- the output of training must land in a compact local inference format
-
-Watch for:
-
-- assuming all training-side artifacts transfer cleanly to GGUF or related export paths
-- choosing methods whose outputs are hard to merge or export for the target runtime
-- using it as the reason to avoid a stronger upstream training stack when conversion is feasible
-
-### Custom Local Runtimes
-
-Good fit when:
-
-- the host project already depends on a local runtime with custom loaders, controller logic, or serving APIs
-- runtime constraints dominate the choice of artifact format
-
-Watch for:
-
-- undocumented feature gaps
-- missing support for adapters, verifier loops, or multimodal bridges
-- hidden integration cost that should push the route toward system composition or model replacement
-
-## Stack-Aware Routing Rules
-
-- Prefer the stack that can support the chosen intervention family with the least custom glue.
-- Prefer broad, inspectable stacks when the route is still changing.
-- Prefer narrower ergonomic stacks only after architectural fit and method fit are confirmed.
-- Prefer serving-aware planning early when adapter merging, quantization, or export format will affect deployment.
-- Prefer system composition over stack contortion when the requested capability depends on subsystems the stack does not natively support.
-
-## Typical Route Patterns
-
-### Supervised Learning
-
-- broad route: `Transformers` plus `PEFT` when flexibility matters
-- fast local route: `Unsloth` when the target architecture and training mode are supported
-- serving follow-up: validate compatibility with `vLLM`, `llama.cpp`, or the project runtime before committing
-
-### Distillation
-
-- use a stack that can support both teacher generation and student training
-- separate teacher serving needs from student finetuning needs when necessary
-- do not assume logit or distribution distillation is practical on every local stack
-
-### Preference Optimization
-
-- use `TRL` or an equivalent stack only when the comparison data and evaluators are already credible
-- avoid stack-heavy preference routes when the real problem is still direct imitation quality
-
-### Reward-Driven Optimization
-
-- require stack support for rollout logging, reward computation, observability, and failure analysis
-- stop if the verifier is weak or the stack cannot surface reward-hacking signals clearly
-
-### Multimodal or Speech Routes
-
-- check architecture support first
-- if the stack cannot support the required modality bridge, recommend model replacement or system composition before training
+| Situation | Stack fit |
+| --- | --- |
+| Supported open-weight model, limited VRAM, behavior-teaching problem | Ergonomic local PEFT stack or general framework with adapters |
+| Route still uncertain, model support unclear, or evaluation needs custom hooks | General training framework first |
+| Pairwise comparisons are ready and the model already imitates reasonably well | Preference or RL trainer |
+| Need batched teacher generation for distillation or large eval runs | Serving-first runtime for generation plus a separate training stack |
+| Target deployment is GGUF or CPU-heavy local inference | Train in a supported upstream stack, then export to an edge runtime |
+| Method depends on editing, merging, or self-play papers | Research or task-specific codebase, with bounded claims only |
 
 ## Anti-Patterns
 
-- choosing a method first and hoping the stack can be forced to support it later
-- choosing a stack for popularity rather than fit
-- collapsing every local run to `LoRA + one trainer`
-- assuming training compatibility implies serving compatibility
-- assuming a text-only stack can be stretched into multimodal or speech support without architectural evidence
+- Choosing a stack first and then bending the method to fit it.
+- Collapsing every route to `LoRA + one trainer`.
+- Assuming training compatibility implies serving compatibility.
+- Forcing a text-only stack into multimodal or speech work without architectural evidence.
+- Accepting unstable custom glue when `system_composition` or `model_replacement` is the cleaner answer.
 
-## Decision Rule
+## Escalation Rule
 
-Choose the stack only after these are explicit:
+If no stack cleanly supports the selected route, prefer in this order:
 
-- intervention family
-- architecture fit
-- artifact format needs
-- serving target
-- evaluation and observability requirements
-
-If no stack cleanly supports the selected route, prefer:
-
-1. a different intervention family
-2. system composition
-3. model replacement
-
-Do not proceed with a stack that would hide critical failure modes or make deployment impossible.
+1. change the intervention family
+2. use system composition
+3. replace the model
+4. defer until missing support is evidenced

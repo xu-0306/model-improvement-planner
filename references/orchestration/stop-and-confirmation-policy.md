@@ -1,6 +1,6 @@
 # Stop And Confirmation Policy
 
-Use this reference when deciding whether the skill should continue autonomously, stop with a bounded artifact chain, or ask the user for confirmation.
+Use this reference when deciding whether the skill should continue autonomously, stop with a bounded recommendation, or ask the user for confirmation.
 
 ## Goal
 
@@ -13,12 +13,10 @@ The skill may continue autonomously for:
 - reading bundled references
 - inspecting the local model directory
 - inspecting the workspace
-- generating capability intake and evaluation artifacts
+- drafting capability briefs and evaluation plans
 - planning probes
 - searching for existing local datasets
 - searching for open datasets from clearly open sources such as Hugging Face or GitHub
-- generating scaffold-only project-local scripts
-- validating bundled artifacts and schemas
 
 ## Must Ask The User First
 

@@ -2,29 +2,35 @@
 
 [English README](README.md)
 
-這個 skill 的用途是幫讀取模型判斷，應該怎麼改善一個本地模型，而不是一開始就直接導向 finetuning。它會先診斷問題、做基線測試、選路線，再產出後續需要的 artifacts 或 scripts。
+`model-improvement-planner` 是一個公開的 planning/routing skill，用於本地模型能力改善規劃。它幫 agent 先判斷真正瓶頸、先定義 evaluation，再選擇最窄且合理的介入方式，而不是預設直接進入 finetuning。
 
-## 這個 skill 能做什麼
+## 這個 skill 做什麼
 
-- 把模糊的能力需求整理成明確的目標能力、成功標準、失敗模式、部署情境與限制。
-- 判斷真正的問題是在 prompt/control、data、objective、runtime、controller、architecture，還是缺少外部系統。
-- 在選路線前先檢查本地 workspace、scripts、模型資訊、runtime 與可用工具，而不是先做假設。
-- 設計 baseline probes，並把 probe 執行接到已部署 student、raw weights、或 API-only 存取的模型。
-- 執行 teacher loop，而且 teacher 就是正在讀這個 skill 的模型自己。
-- 把 probe 結果轉成 dataset record，再轉成 Alpaca、ChatML、ShareGPT、DPO 等常見訓練格式。
-- 在路線合理後，生成 project-local 的 script plan。
-- 當正確答案其實不是訓練時，正確地路由到 runtime adaptation、controller 修復、system composition 或 model replacement。
-- 遇到未知需求時進入研究流程，而不是硬套到最接近的既有路線。
+- 把模糊的改善需求整理成明確的目標能力、成功條件、部署情境與失敗面。
+- 區分問題究竟在模型本身，還是在 prompting、controller、runtime、retrieval、tool、serving 或 architecture。
+- 採用 evaluation-first：先定義 baseline probes、held-out checks 與 stop rules，再討論資料或訓練。
+- 選擇最窄且合理的路線，包括 prompting、tooling、data cleanup、finetuning、distillation、system composition、model replacement，或明確 stop/defer。
+- 產出有邊界的 planning bundle，包含 diagnosis、已確認與未確認事實、evaluation plan、路線決策、排除方案與下一步。
+- 只在需要時載入公開 references，避免把所有變體細節一次塞進主流程。
 
 ## 什麼時候適合使用
 
-當使用者提出這類需求時，就適合用這個 skill：
+適合用在這類請求：
 
-- 「幫我提升本地模型的 tool use 能力」
-- 「判斷這個 checkpoint 應該用 SFT、DPO，還是乾脆換模型」
-- 「幫我分辨問題是在 controller 還是在模型本身」
-- 「規劃如何提升本地模型的多語、coding、多模態或 structured output 能力」
-- 「把目前的 plan 橋接成 probes、dataset 與 project-local scripts」
+- 「判斷這個 checkpoint 應該先改 prompting、做 finetuning，還是直接換模型」
+- 「診斷失敗點是在模型、controller，還是 serving stack」
+- 「給我一份 evaluation-first 的改善規劃，不要 generic training recipe」
+- 「判斷這個 multimodal 或 speech 需求是不是其實是 system composition 問題」
+- 「告訴我最小、且有證據門檻支撐的下一步」
+
+## 公開版 skill 形態
+
+公開版 skill 刻意保持精簡：
+
+- `SKILL.md`：主 planning/routing workflow
+- `references/`：公開決策支援、輸出形狀指引與規劃示例
+
+若 repo 內有 `legacy/` 目錄，它代表歷史私有工具鏈或舊文檔，不屬於公開 skill 核心。
 
 ## 安裝方式
 
@@ -41,6 +47,12 @@
 git clone https://github.com/xu-0306/model-improvement-planner.git <上方對應路徑>
 ```
 
-## 專案結構
+## References 導覽
 
-`SKILL.md` 是入口。支援文件、腳本、評估案例與 artifact contracts 分別在 `references/`、`scripts/` 與 `evaluations/` 底下。
+先從 `SKILL.md` 進入，再只讀當前請求真正需要的 references：
+
+- `references/routing/`：能力 intake、evaluation-first 流程、介入分類與路線選擇
+- `references/orchestration/`：stop rules、tool-routing 檢查與未知需求研究指引
+- `references/output-shapes.md`：公開版最小輸出形狀
+- `references/examples/planning-examples.md`：短版 planning-first 示例
+- `references/probes/`、`references/data/`、`references/training/`、`references/domains/`：僅在需要特定路線深度時再讀

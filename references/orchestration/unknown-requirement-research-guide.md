@@ -6,7 +6,7 @@ Use this reference when a request does not match any current routing or domain p
 
 1. Confirm that the request does not align with existing routing documents or domain playbooks.
 2. Declare explicitly that the bundled references do not cover this scenario before proceeding.
-3. Enter the research flow rather than guessing a method; log the uncertainty in `research_evidence` or `tool_inventory`.
+3. Enter the research flow rather than guessing a method; keep the uncertainty visible in the planning bundle.
 
 ## Decompose the Request
 
@@ -37,10 +37,10 @@ For every step, note: source identity, why it was necessary, and how it shifts t
 ## From Research to Execution
 
 1. Design a bounded solution (training plan, system composition, runtime adaptation, etc.) supported by the confirmed facts.
-2. Emit project-local scripts or artifacts only when the research justifies the path and the environment can host it.
-3. If uncertainty remains, output a bounded recommendation (research plan, capability decomposition, evaluation memo) instead of pretending to reach execution readiness.
+2. Recommend execution only when the research justifies the path and the environment can host it.
+3. If uncertainty remains, output a bounded recommendation such as a research plan, capability decomposition memo, or evaluation memo instead of pretending to reach execution readiness.
 
-Always map the research findings into `research_evidence` with `route_implications`, `unresolved_facts`, and `recommended_followups`.
+Always carry the research findings forward as confirmed facts, unresolved facts, route implications, and recommended follow-ups.
 
 ## Research Stop Conditions
 
@@ -51,11 +51,11 @@ Stop researching and emit a bounded recommendation when:
 - the research has consumed more than three distinct source types without convergence
 - the user's request depends on a capability that no discovered model, tool, or system composition can plausibly provide
 
-In these cases, output a `research_evidence` artifact with `status: insufficient_evidence`, list the unresolved facts, and ask the user for direction before continuing.
+In these cases, output a bounded recommendation with `status: insufficient_evidence`, list the unresolved facts, and ask the user for direction before continuing.
 
 ## Anti-Patterns
 
 - Claiming "can do this" without documented evidence or research.
 - Pretending the closest known route fully covers the request without verifying the gaps.
 - Recommending SFT before comparing available tool or system interventions.
-- Signaling execution-ready artifacts when key facts are still speculative.
+- Signaling execution-ready outputs when key facts are still speculative.

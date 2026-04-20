@@ -1,184 +1,139 @@
 ---
 name: model-improvement-planner
-description: Diagnoses arbitrary local-model capability requests, decomposes the real gap, gathers evidence, selects the narrowest viable intervention family, and emits evaluation, data, training, runtime, or system-composition artifacts. Use when capability work requires intake and routing, method selection, research, supervision planning, contract validation, runtime discovery, or explicit decisions between prompting, tooling, finetuning, distillation, preference optimization, reward-driven optimization, model replacement, and system composition.
+description: Diagnoses local-model capability gaps, decomposes bottlenecks, selects the narrowest viable intervention family, and produces evaluation-first improvement plans with recommended outputs and next steps. Use when capability work requires problem framing, bottleneck diagnosis, research planning, supervision/data strategy, or explicit decisions between prompting, tooling, finetuning, distillation, preference optimization, reward design, model editing, model merging, continual learning, retrieval-conditioned tuning, system composition, model replacement, or stop/defer.
 ---
 
 # Model Improvement Planner
 
-Use this skill as an open-world model improvement controller.
+Use this skill as a planning and routing layer for model improvement work.
 
-Do not jump straight to finetuning. Start with capability intake, decomposition, problem typing, evidence, and evaluation.
+Do not jump straight to finetuning. Diagnose the real gap first, define how it will be measured, then choose the narrowest rational intervention.
 
-Core principles:
+## Core Positioning
 
-- **Open-world**: listed task families, intervention families, stacks, and benchmarks are illustrative, not exhaustive. Prefer principled decomposition over case memorization.
-- **Invariant workflow**: for every request, answer: what capability? where is the gap? what evidence is sufficient? what routes are feasible? which is the narrowest rational intervention? what artifacts come next? what are the stop conditions?
-- **Intervention-family policy**: the primary outcome is a justified intervention decision, not "always train the model". Valid families include prompting, tooling, data work, finetuning, distillation, preference optimization, reward-driven optimization, runtime adaptation, system composition, model replacement, or explicit deferral.
-- **Unknown-requirement protocol**: when the request exceeds existing references, follow `references/orchestration/unknown-requirement-research-guide.md`.
+- Treat the primary output as a justified intervention decision, not as "a training plan by default."
+- Work evaluation-first: define baseline checks, probes, and acceptance criteria before proposing data generation or training.
+- Separate model problems from controller, runtime, serving, retrieval, tool, or architecture problems.
+- Prefer the narrowest viable route: prompting, tooling, data cleanup, evaluation improvement, small post-training, system composition, model replacement, or explicit stop/defer.
+- Keep recommendations evidence-gated. When facts are missing, say what is confirmed, what is missing, and what must be checked next.
+- Use bundled references only as needed. Keep the main workflow here; load deeper guidance only for the selected route.
 
 ## Default Workflow
 
-For nontrivial requests, follow this sequence:
+Follow this sequence for any nontrivial request:
 
-1. Inspect the current session and workspace to discover available references, scripts, skills, MCP tools, runtimes, and backend adapters before assuming a route.
-2. Normalize the target capability, success criteria, failure modes, deployment context, and requested execution depth.
-3. Decompose the request into sub-capabilities, modalities, and external dependencies.
-4. Classify the main bottleneck before naming a method.
-5. Gather model, tokenizer, checkpoint, runtime, stack, hardware, and evaluation facts.
-6. Define the baseline evaluation path and probe-generation plan before proposing data generation or training.
-7. Research local references first; use session tools, MCP, and external sources only when local evidence is insufficient.
-8. Choose the narrowest viable intervention family and explicit teacher-role bundle.
-9. Reuse existing runtime and project support when evidenced; otherwise emit bounded external artifacts or project-local script plans.
-10. Emit artifacts, risks, stop rules, confirmation points, and rejected alternatives instead of pretending execution is ready.
+1. Normalize the target capability, failure mode, success criteria, deployment context, and user intent.
+2. Decompose the request into sub-capabilities, modalities, external dependencies, and likely failure surfaces.
+3. Classify the main bottleneck before naming a method: prompt, data, objective, evaluator, runtime, controller, retrieval, subsystem, architecture, or deployment.
+4. Gather route-critical facts about the student model, tokenizer, checkpoint form, serving path, hardware, data availability, and constraints.
+5. Mark confirmed facts versus missing facts. Do not fill gaps with assumptions.
+6. Define the baseline evaluation path: probes, held-out checks, acceptance thresholds, and failure evidence needed to move forward.
+7. Decide whether additional research is needed. Prefer bundled references first, then local workspace evidence, then external sources when required.
+8. Choose the narrowest intervention family that can plausibly close the gap.
+9. Recommend supervision, teacher, verifier, or data strategy only after the intervention family is chosen.
+10. Emit a bounded output bundle: diagnosis, evidence state, evaluation-first plan, route recommendation, rejected alternatives, risks, stop rules, and next actions.
 
-Copy this checklist when the run is large enough to need explicit progress tracking:
+Use this checklist when the run is large enough to need explicit tracking:
 
 ```text
-Capability Optimization Progress
-- [ ] Inspect the current session and workspace for available tools and route-relevant constraints.
-- [ ] Normalize the target capability, failure modes, success criteria, and deployment target.
-- [ ] Decompose the request into sub-capabilities, modalities, and external dependencies.
-- [ ] Classify the bottleneck: prompt, data, objective, runtime, controller, subsystem, architecture, or deployment.
-- [ ] Inspect model, tokenizer, checkpoint, runtime, stack, and hardware facts.
-- [ ] Define a baseline evaluation path, probe-generation plan, and acceptance threshold.
-- [ ] Research bundled references first, then use current-session tools and external sources only when local evidence is insufficient.
-- [ ] Choose the narrowest viable intervention family and teacher-role bundle before naming implementation methods.
-- [ ] Reuse existing support when evidenced; generate project-local scaffolds only when the route and environment justify them.
-- [ ] Emit artifacts, risks, stop rules, and rejected alternatives.
+Model Improvement Planning
+- [ ] Normalize target capability, failures, success criteria, and deployment context.
+- [ ] Decompose the capability into sub-problems and dependencies.
+- [ ] Classify the bottleneck before choosing a method.
+- [ ] Gather model, runtime, serving, hardware, and data facts.
+- [ ] Separate confirmed facts from missing facts.
+- [ ] Define baseline evaluation and acceptance thresholds.
+- [ ] Research only as needed, starting from bundled references.
+- [ ] Choose the narrowest viable intervention family.
+- [ ] State rejected alternatives, risks, stop rules, and next actions.
 ```
+
+## Decision Checkpoints
+
+Answer these questions before committing to a route:
+
+1. What exact capability is being improved, and how will success be measured?
+2. Is the failure actually in the model, or in prompting, controller logic, retrieval, tools, serving, or environment setup?
+3. Is there an architecture mismatch? Do not recommend multimodal or speech training when the current system lacks the required subsystem.
+4. Are evaluation and probes strong enough to distinguish prompt fixes from model-side improvements?
+5. What facts are missing that could invalidate the recommendation?
+6. What supervision shapes are available: preferences, demonstrations, verifier labels, trajectories, edits, retrieval traces, or only weak outcomes?
+7. Does the proposed route fit the serving target, packaging constraints, latency budget, and hardware reality?
+8. Is there a narrower route that should be tried first?
+9. What should stop the plan from proceeding until more evidence or user confirmation is available?
 
 ## Default Output Bundle
 
-Start by producing:
+Produce a concise planning bundle in sections or structured fields. Use `references/output-shapes.md` when the request benefits from a more explicit shape. Include at least:
 
-1. normalized capability target
-2. decomposition and bottleneck hypothesis
-3. confirmed facts and missing facts
-4. evaluation-first plan
-5. intervention-family recommendation
-6. runtime-support verdict: reuse, scaffold, compose externally, replace model, or stop
-7. teacher-loop recommendation and data-sourcing policy
-8. artifact plan with concrete output paths
-9. environment discovery and project-local script-generation plan when execution depends on the active workspace
+1. `target_capability`: the normalized capability and success condition
+2. `decomposition`: sub-capabilities, dependencies, and main failure surfaces
+3. `bottleneck_hypothesis`: primary bottleneck and why it is the leading explanation
+4. `confirmed_facts`: route-critical facts already established
+5. `missing_facts`: unknowns that could change the route
+6. `evaluation_plan`: baseline probes, held-out checks, and acceptance thresholds
+7. `intervention_decision`: recommended family, why it fits, and what it is not
+8. `rejected_alternatives`: narrower or broader routes considered and rejected
+9. `risks_and_stop_rules`: what could invalidate the plan or require confirmation
+10. `next_actions`: the smallest sensible next steps
+
+When the request needs more structure, organize the bundle as:
+
+- capability brief
+- fact inventory
+- evaluation plan
+- intervention decision
+- next-step execution outline
 
 ## Boundaries
 
-- Keep orchestration, decision rules, prompt contracts, and validation logic in the skill.
-- Keep generated adapters, training launchers, runtime wrappers, and project-local integration code outside the skill package.
-- Treat PEFT as an implementation choice after the objective family is selected.
-- Do not claim support, training readiness, or architecture fit without evidence.
-- Do not assume any skill, MCP server, or backend exists until it is discoverable in the current session or workspace.
-- Prefer bundled references and local evidence before external research.
-- Prefer open datasets from Hugging Face or GitHub before asking to scrape the web or use user-private data.
-- When evidence is incomplete, emit a bounded recommendation rather than hallucinating readiness.
-
-## Quick Start
-
-Use this fast path when the user needs a concrete execution pattern rather than only policy guidance:
-
-1. Emit the bootstrap pair with `scripts/artifact_cli.py bundle bootstrap`.
-2. Inspect the active project with `scripts/discover_environment.py` before assuming local tools, datasets, or training surfaces exist.
-3. Inspect the local model with `scripts/local_model_profile.py` and gather baseline evidence with `scripts/run_capability_probes.py` when route choice depends on real capability data.
-4. If the route depends on live facts, read bundled references first, then use currently available session tools or external sources to emit `research-evidence`.
-5. Emit either `bundle training-route` or `bundle system-route` after the intervention family and teacher-loop plan are justified.
-6. Generate a project-local scaffold with `scripts/emit_generated_script_plan.py` when the route depends on workspace-specific data or training surfaces.
-7. If the route is training-bound, prefer open datasets from Hugging Face or GitHub before asking to scrape or use user-private data.
-8. Validate with `scripts/validate_contracts.py`, then `scripts/validate_artifact_chain.py`.
-
-Use this minimal command pattern for a first nontrivial run:
-
-```bash
-python3 scripts/artifact_cli.py bundle bootstrap \
-  --output-dir "$WORKSPACE/artifacts/model-improvement-planner/chart-qa" \
-  --target-capability "chart-grounded question answering" \
-  --user-intent planning \
-  --input-modality image \
-  --output-modality text \
-  --sub-capability chart-extraction \
-  --sub-capability grounded-answering \
-  --primary-evaluation-mode verifier-based \
-  --baseline-probe "held-out chart probe set" \
-  --heldout-evaluation "chart qa regression split" \
-  --acceptance-criterion "answers stay grounded in image evidence"
-
-python3 scripts/validate_contracts.py \
-  --artifact "$WORKSPACE/artifacts/model-improvement-planner/chart-qa/capability-intake.json" \
-  --contract capability-intake
-
-python3 scripts/validate_contracts.py \
-  --artifact "$WORKSPACE/artifacts/model-improvement-planner/chart-qa/evaluation-plan.json" \
-  --contract evaluation-plan
-```
-
-Load `references/example-runs.md` only when you need longer copy-paste command patterns for bootstrap, training-route, or system-route flows. Treat those patterns as illustrative helpers, not mandatory stack choices.
-Treat any language-specific values in example runs, such as `--target-language zh-Hant`, as case-specific placeholders tied to that user's optimization target, not as defaults for unrelated users or sessions.
-Load `references/release-evaluation-cases.md` only when you need manual release review cases and pass/fail expectations.
-
-## From Plan to Execution
-
-After the planning artifacts are ready, follow this path to actual execution:
-
-1. Connect to the student model: determine whether the model is served or raw weights. See `references/routing/student-model-connection-guide.md`.
-2. Generate and run probes: author probe specs following `references/probes/probe-spec-template.jsonl` format, then run `scripts/run_capability_probes.py`.
-3. Execute teacher loop: the reading model acts as teacher. See `references/training/teacher-loop-execution-guide.md`.
-4. Convert training data: transform dataset records into framework-compatible format. See `references/data/dataset-format-guide.md`.
-5. Generate training script: produce a project-local training script based on the route and environment. See `references/orchestration/dynamic-script-generation.md`.
-
-For a complete worked example, see `references/walkthrough-example.md`.
-
-When the request is outside the scope of existing references, follow `references/orchestration/unknown-requirement-research-guide.md` to research and design a solution.
-
-## Trigger Examples
-
-These example requests should trigger this skill:
-
-- "Figure out whether my local Qwen checkpoint should use prompting, SFT, or model replacement to improve chart understanding."
-- "Diagnose why my tool-use model fails long-horizon tasks and tell me whether the bottleneck is data, controller logic, or runtime support."
-- "Plan a system-composition route for invoice image extraction instead of pretending my text-only base model can already do vision."
-- "Inspect this local adapter checkpoint, tell me what training and serving stacks are realistic, and emit the next artifacts."
-- "I need a bounded recommendation for adding speech I/O to a local model without hallucinating that the current architecture already supports audio."
-
-## Artifact Paths
-
-Use this default convention unless the user gives a project-specific location:
-
-- `<workspace>/artifacts/model-improvement-planner/<target-slug>/capability-intake.json`
-- `<workspace>/artifacts/model-improvement-planner/<target-slug>/model-discovery.json`
-- `<workspace>/artifacts/model-improvement-planner/<target-slug>/environment-discovery.json`
-- `<workspace>/artifacts/model-improvement-planner/<target-slug>/research-evidence.json`
-- `<workspace>/artifacts/model-improvement-planner/<target-slug>/intervention-decision.json`
-- `<workspace>/artifacts/model-improvement-planner/<target-slug>/evaluation-plan.json`
-- `<workspace>/artifacts/model-improvement-planner/<target-slug>/training-plan.json`
-- `<workspace>/artifacts/model-improvement-planner/<target-slug>/generated-script-plan.json`
-- `<workspace>/artifacts/model-improvement-planner/<target-slug>/system-composition-plan.json`
-- `<workspace>/artifacts/model-improvement-planner/<target-slug>/runtime-scaffold/`
-- `<workspace>/artifacts/model-improvement-planner/<target-slug>/dataset-records.jsonl`
-- `<workspace>/artifacts/model-improvement-planner/<target-slug>/evaluator-payloads.jsonl`
+- Keep this skill focused on diagnosis, routing, and planning.
+- Do not assume any bundled automation, private toolkit, or hidden backend exists.
+- Do not promise training readiness, stack compatibility, serving compatibility, or dataset sufficiency without evidence.
+- Do not recommend training when prompt, controller, retrieval, or system-composition fixes are more plausible.
+- Do not overclaim architecture fit for multimodal, audio, or tool-use requests.
+- Prefer local and open data sources before suggesting scraping or private data use.
+- If evidence is incomplete, emit a bounded recommendation or stop/defer decision instead of pretending execution is ready.
 
 ## Reference Map
 
 Read only what the current request needs.
 
-Core routing and policy:
+Core routing:
 
-- `references/routing/` - capability intake, research routing, evaluation-first workflow, intervention taxonomy, model discovery, training-stack selection, serving compatibility, planner orchestration, method selection matrix, quality gates, student model connection guide, probe backend adapters, cold-start playbook
+- `references/routing/capability-intake-and-routing.md`
+- `references/routing/evaluation-first-workflow.md`
+- `references/routing/intervention-taxonomy.md`
+- `references/routing/method-selection-matrix.md`
+- `references/routing/research-routing.md`
+- `references/routing/artifact-consistency-and-quality-gates.md`
+- `references/routing/model-discovery.md`
+- `references/routing/training-stack-selection.md`
+- `references/routing/serving-compatibility-guide.md`
 
-Dynamic orchestration:
+Orchestration and policy:
 
-- `references/orchestration/` - tool discovery and routing, dynamic script generation, stop and confirmation policy, unknown requirement research guide
+- `references/orchestration/stop-and-confirmation-policy.md`
+- `references/orchestration/tool-discovery-and-routing.md`
+- `references/orchestration/unknown-requirement-research-guide.md`
 
-Artifact contracts and schemas:
+Evaluation and data:
 
-- `references/artifacts/` - see `references/artifacts/README.md` for the full contract-schema index and required-field summary
+- `references/output-shapes.md`
+- `references/examples/planning-examples.md`
+- `references/probes/probe-generation-playbook.md`
+- `references/data/open-dataset-sourcing-policy.md`
+- `references/training/supervision-shapes.md`
 
-Method and supervision references:
+Family-specific routing:
 
-- `references/training/` - finetuning method taxonomy, supervision shapes, teacher and verifier prompt contracts, process-reward and verifier contract, route thresholds, Unsloth stack guide, TRL stack guide, teacher-loop execution guide
-
-Probe and data references:
-
-- `references/probes/` - probe generation playbook, probe spec template
-- `references/data/` - open dataset sourcing policy, dataset format guide
+- `references/training/distillation-patterns.md`
+- `references/training/peft-method-selection.md`
+- `references/training/model-editing-method-taxonomy.md`
+- `references/training/model-merging-guide.md`
+- `references/training/self-play-and-self-improvement.md`
+- `references/training/continual-learning.md`
+- `references/training/rag-tuning.md`
 
 Domain playbooks:
 
@@ -187,73 +142,13 @@ Domain playbooks:
 - `references/domains/multimodal.md`
 - `references/domains/speech-audio.md`
 
-Examples and walkthroughs:
+## Trigger Examples
 
-- `references/example-runs.md`
-- `references/release-evaluation-cases.md`
-- `references/walkthrough-example.md`
+These requests should trigger this skill:
 
-## Scripts
-
-Prefer the consolidated artifact entrypoint:
-
-- `scripts/artifact_cli.py write capability-intake`
-- `scripts/artifact_cli.py write dataset-record`
-- `scripts/artifact_cli.py write evaluation-plan`
-- `scripts/artifact_cli.py write evaluator-payload`
-- `scripts/artifact_cli.py write model-discovery`
-- `scripts/artifact_cli.py write environment-discovery`
-- `scripts/artifact_cli.py write intervention-decision`
-- `scripts/artifact_cli.py write research-evidence`
-- `scripts/artifact_cli.py write training-plan`
-- `scripts/artifact_cli.py write generated-script-plan`
-- `scripts/artifact_cli.py write system-composition-plan`
-- `scripts/artifact_cli.py bundle bootstrap`
-- `scripts/artifact_cli.py bundle training-route`
-- `scripts/artifact_cli.py bundle system-route`
-
-Keep these validation and runtime tools:
-
-- `scripts/local_model_profile.py` for backend-agnostic local model metadata inspection
-- `scripts/run_capability_probes.py` for normalized probe-result and probe-summary emission from probe specs plus either captured responses, a backend config, or a legacy backend command; use `probe_summary` as the compact baseline-diagnosis artifact before route selection
-- `scripts/discover_environment.py` for environment-first workspace inspection before selecting reusable project-local data or training surfaces
-- `scripts/emit_generated_script_plan.py` for emitting project-local source collection, data generation, curation, training, and evaluation scaffold steps from the discovered environment
-- `scripts/emit_training_route.py` for scaffold-only `training_route_manifest`, `train_config.json`, and `launch.sh` emission. Use normalized route families first, then add an optional bundled implementation profile only when it matches the discovered environment.
-- `scripts/validate_contracts.py` for single-artifact contract checks
-- `scripts/validate_artifact_chain.py` for cross-artifact consistency
-- `scripts/generate_runtime_scaffold.py` for generic external scaffolds
-- `scripts/validate_runtime_scaffold.py` for scaffold validation
-- `scripts/smoke_test.py` for a bundled release-hardening check that exercises bootstrap, probes, training-route emission, system-route emission, and runtime scaffold validation in a temporary workspace
-
-Use `artifact_cli.py` and `validate_contracts.py` as the canonical entrypoints.
-
-## Dynamic Execution Rules
-
-When the request depends on live facts or external capabilities:
-
-1. inspect the current session and workspace first
-2. read bundled references before using external tools
-3. discover which skills, MCP tools, backends, and runtimes are actually available now
-4. choose the narrowest tool that can complete the current step
-5. record route-critical findings in `research-evidence` or `tool-inventory`
-
-When data collection is needed:
-
-1. prefer local datasets first
-2. then search open datasets from Hugging Face
-3. then search open datasets or curated corpora from GitHub
-4. if still insufficient, ask the user before scraping web data or using private data
-
-When script generation is needed:
-
-1. generate project-local scripts only after the route is justified
-2. prefer small single-purpose scripts over one large orchestrator
-3. use scaffold-only scripts when route-critical facts remain unresolved
-
-## Release Validation
-
-Before publishing or after major edits:
-
-1. Run `python3 scripts/smoke_test.py`.
-2. Review the manual checks in `references/release-evaluation-cases.md`.
-3. Confirm the skill still routes multimodal and system-composition requests conservatively instead of defaulting to finetuning.
+- "Figure out whether this local checkpoint needs prompting changes, finetuning, or full model replacement."
+- "Diagnose why my tool-use model fails long tasks and tell me whether the bottleneck is the model, controller, or runtime."
+- "Plan the safest route for adding chart understanding without pretending the current architecture already supports vision."
+- "Decide whether this retrieval-grounded failure needs RAG tuning, better evidence use, or just evaluation cleanup."
+- "Tell me whether continual learning, model editing, or merging is the right update path for this checkpoint."
+- "Give me an evaluation-first improvement plan and the smallest next step instead of a generic training recipe."

@@ -1,3 +1,7 @@
-.codex 
-.vscode/ 
-spec/
+.codex
+.claude/
+.vscode/
+.git
+__pycache__/
+*.pyc
+legacy

@@ -12,7 +12,7 @@ Generate compact, capability-aware probes that separate relative strengths, weak
 - prefer small probe batches that isolate a hypothesis
 - compare relative strengths when the user asks to shift the model toward a target capability or language
 - pair each probe family with an evaluation mode
-- record the plan in `probe_generation_plan`
+- record the plan in the evaluation-first planning bundle
 
 ## Core Probe Families
 
@@ -107,9 +107,7 @@ Each planned probe pattern should identify:
 - `expected_evaluation_mode`
 - `failure_hypothesis`
 
-These families illustrate the required probe shape. The skill is not limited to them; any capability family is valid so long as the plan follows the same schema.
-
-For concrete probe spec format examples, see `probe-spec-template.jsonl` in this directory.
+These families illustrate the required probe shape. The skill is not limited to them; any capability family is valid so long as the plan stays explicit about capability, modality, evaluation mode, and failure hypothesis.
 
 ## Stop Rules
 

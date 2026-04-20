@@ -2,29 +2,35 @@
 
 [繁體中文 README](README.zh-TW.md)
 
-This skill helps a reading model figure out how to improve a local model without jumping straight to finetuning. It diagnoses the problem, tests the baseline, chooses a sensible path, and produces the next artifacts or scripts needed to move forward.
+`model-improvement-planner` is a public planning and routing skill for local-model improvement work. It helps an agent diagnose the real bottleneck, define evaluation before optimization, and choose the narrowest viable intervention instead of defaulting to finetuning.
 
-## What this skill can do
+## What this skill does
 
-- Normalize a vague capability request into explicit target capability, success criteria, failure modes, deployment context, and constraints.
-- Diagnose whether the real problem is in prompt/control, data, objective, runtime, controller, architecture, or missing external subsystems.
-- Inspect the local environment, workspace, scripts, and model metadata before assuming execution paths exist.
-- Design baseline probes before route selection, then connect those probes to a served model, raw weights, or API-only student endpoint.
-- Run a teacher-loop workflow where the reading model itself acts as teacher, critic, verifier, demonstrator, or preference judge.
-- Convert probe outputs into dataset records and then into common training formats such as Alpaca, ChatML, ShareGPT, or DPO-style datasets.
-- Generate project-local script plans after the route is justified.
-- Route correctly when the answer is not training, including runtime adaptation, controller fixes, system composition, or model replacement.
-- Handle previously unseen requests by entering a research workflow instead of forcing the request into the closest familiar pattern.
+- Normalize a vague improvement request into a concrete target capability, success condition, deployment context, and failure surface.
+- Separate model-side problems from prompting, controller, runtime, retrieval, tool, serving, or architecture problems.
+- Work evaluation-first: define baseline probes, held-out checks, and stop rules before proposing data or training work.
+- Choose the narrowest rational route, including prompting, tooling, data cleanup, finetuning, distillation, system composition, model replacement, or explicit stop/defer.
+- Produce a bounded planning bundle with the diagnosis, confirmed versus missing facts, evaluation plan, route decision, rejected alternatives, and next actions.
+- Use the public references as optional depth, loading only the parts needed for the current route.
 
 ## When to use it
 
-Use this skill when the user asks for things like:
+Use this skill for requests such as:
 
-- "Improve my local model's tool use."
-- "Figure out whether this checkpoint needs SFT, DPO, or model replacement."
-- "Diagnose whether the failure is in the controller or the model."
-- "Plan how to improve a local model's multilingual, coding, multimodal, or structured-output behavior."
-- "Bridge my current plan into probes, datasets, and project-local scripts."
+- "Figure out whether this checkpoint needs prompting changes, finetuning, or model replacement."
+- "Diagnose whether the failure is in the model, the controller, or the serving stack."
+- "Give me an evaluation-first improvement plan instead of a generic training recipe."
+- "Decide whether this multimodal or speech request is actually a system-composition problem."
+- "Tell me the smallest next step that is evidence-gated and worth trying first."
+
+## Public skill shape
+
+The public skill surface is intentionally small:
+
+- `SKILL.md`: the main planning and routing workflow
+- `references/`: public decision support, output guidance, and planning examples
+
+If a `legacy/` directory is present, it contains historical private-tooling material and is not part of the public skill core.
 
 ## Installation
 
@@ -41,6 +47,12 @@ Clone this repo into your agent's skill directory. Requires `python3` 3.8+.
 git clone https://github.com/xu-0306/model-improvement-planner.git <path-from-table>
 ```
 
-## Project structure
+## Reference guide
 
-`SKILL.md` is the entry point. Supporting references, scripts, evaluations, and artifact contracts are organized under `references/`, `scripts/`, and `evaluations/`.
+Start from `SKILL.md`, then read only the references needed for the current request:
+
+- `references/routing/`: capability intake, evaluation-first flow, intervention taxonomy, and route selection
+- `references/orchestration/`: stop rules, tool-routing checks, and unknown-requirement research guidance
+- `references/output-shapes.md`: minimal public output bundle shapes
+- `references/examples/planning-examples.md`: short planning-first examples
+- `references/probes/`, `references/data/`, `references/training/`, `references/domains/`: route-specific depth loaded only when needed

@@ -2,11 +2,9 @@
 
 Use this reference when the requested model does not already have a known runtime integration.
 
-For first-run intake, stop/continue behavior, response shape, artifact locations, and the default "does support already exist?" check, start with [cold-start-playbook.md](./cold-start-playbook.md).
-
 ## Goal
 
-Produce a normalized discovery artifact before generating any external runtime scaffold.
+Produce a normalized fact sheet before treating a route as execution-ready.
 
 ## Inspect
 
@@ -27,7 +25,7 @@ Produce a normalized discovery artifact before generating any external runtime s
 
 ## Minimum Discovery Output
 
-Capture the minimum intake fact sheet from the cold-start playbook, then add:
+Capture at least:
 
 - model family hint
 - checkpoint or weight format
@@ -38,31 +36,10 @@ Capture the minimum intake fact sheet from the cold-start playbook, then add:
 - device/runtime assumptions
 - missing facts that still block safe support
 
-## Machine-Readable Contract
-
-Prefer a JSON artifact with these top-level fields:
-
-- `contract`: `model_discovery`
-- `schema_version`
-- `requested_runtime_id`
-- `model_family_hint`
-- `checkpoint_format`
-- `tokenizer_format`
-- `expected_load_path`
-- `likely_inference_library`
-- `likely_training_library_or_status`
-- `device_runtime_assumptions`
-- `runtime_constraints`
-- `missing_facts`
-
-Keep empty strings or empty arrays instead of inventing values. Add project-specific fields only as non-contract extensions.
-
-Example shape:
+If structured output helps, use a compact fact sheet such as:
 
 ```json
 {
-  "contract": "model_discovery",
-  "schema_version": "1.0",
   "requested_runtime_id": "example-runtime",
   "model_family_hint": "decoder-only transformer",
   "checkpoint_format": "safetensors",
@@ -78,5 +55,5 @@ Example shape:
 
 ## Decision Rule
 
-- If the model can be classified safely after the cold-start checks, generate an external runtime scaffold.
+- If the model can be classified safely, continue with route selection and serving-fit checks.
 - If critical facts are missing, stop and report the missing facts instead of guessing.

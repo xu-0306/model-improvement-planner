@@ -1,6 +1,6 @@
 # Tool Discovery And Routing
 
-Use this reference when the skill needs live facts, research, backend execution, data collection, or script generation and must decide which currently available tool surface should handle the step.
+Use this reference when the skill needs live facts, research, backend execution, or data collection and must decide which currently available tool surface should handle the step.
 
 ## Goal
 
@@ -11,10 +11,10 @@ Choose tools dynamically from the current session and workspace instead of hardc
 Inspect in this order:
 
 1. bundled references in this skill
-2. local workspace scripts and configs
+2. local workspace docs, configs, and evidence surfaces
 3. current-session skills
 4. current-session MCP servers, templates, and resources
-5. callable local runtimes and backend adapters
+5. callable local runtimes or exposed endpoints
 6. external web or documentation access
 
 Record the resulting inventory before route-critical research or execution begins.
@@ -26,7 +26,7 @@ For each step, ask:
 1. what evidence or action is needed now
 2. what tools are actually available now
 3. which available tool is narrow enough to complete only that step
-4. whether the result needs to be exported into an artifact
+4. whether the result needs to be carried forward into the planning bundle
 
 Do not start from a remembered tool name. Start from the needed evidence or action.
 
@@ -36,17 +36,9 @@ Do not start from a remembered tool name. Start from the needed evidence or acti
 
 Prefer first when:
 
-- the current repo already contains routing, training, evaluation, or contract guidance
+- the current repo already contains routing, training, evaluation, or policy guidance
 - the question is about this skill's own workflow
 - the user asked for a bounded local recommendation
-
-### Local Scripts
-
-Prefer when:
-
-- a bundled script already provides the needed contract, probe normalization, validation, or scaffold emission
-- deterministic behavior matters more than flexible exploration
-- the output must match an existing schema
 
 ### Current-Session Skills
 
@@ -71,12 +63,12 @@ Prefer when:
 Prefer when:
 
 - the step is empirical probing against a local or exposed model
-- the model is callable through `command` or `openai_compatible_http`
+- the model is callable through a discoverable runtime or endpoint
 - baseline evidence is needed before route selection
 
 ### External Web Research
 
-Prefer only after local references, local scripts, session skills, and MCP options are insufficient.
+Prefer only after local references, session skills, and MCP options are insufficient.
 
 Use for:
 
@@ -94,15 +86,15 @@ Use for:
 2. inspect local model card or project docs
 3. use discoverable skills or MCP tools if available
 4. browse official external sources only for unresolved route-critical gaps
-5. emit `research_evidence`
+5. record confirmed facts, unresolved facts, and route implications in the planning bundle
 
 ### Baseline Probing
 
 1. inspect tool inventory
 2. confirm callable backend
-3. emit `probe_generation_plan`
-4. execute probes with the narrowest backend adapter
-5. export `probe_result` and `probe_summary`
+3. define a compact probe set and evaluation mode
+4. execute probes with the narrowest available backend
+5. carry results into the evaluation and facts sections of the plan
 
 ### Data Sourcing
 
@@ -110,24 +102,17 @@ Use for:
 2. search open datasets from Hugging Face or GitHub
 3. if no suitable open source exists, stop and ask the user before scraping or using private data
 
-### Dynamic Script Generation
-
-1. verify the route is justified
-2. inspect workspace surfaces and available runtimes
-3. generate only the project-local scripts needed for the next bounded step
-4. export or update `generated_script_plan`
-
 ## Recording Requirements
 
 Whenever the skill chooses a tool, record:
 
 - tool category
-- concrete tool name or script path
+- concrete tool name or evidence surface
 - why it was selected
 - what step it supports
-- what artifact should capture the result
+- what part of the planning bundle should capture the result
 
-If the choice materially affects route selection, carry it into `research_evidence` or `tool_inventory`.
+If the choice materially affects route selection, carry it into the facts, evaluation, or intervention sections of the plan.
 
 ## Anti-Patterns
 

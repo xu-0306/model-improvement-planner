@@ -1,26 +1,35 @@
-# References Layout
+# Public References
 
-Use the smallest subset needed for the current run.
+Use the smallest subset needed for the current planning run.
 
-## Folders
+This directory supports the public planning/routing skill. Start from `SKILL.md`, then read only the categories that matter for the current request.
 
-- `routing/`: core workflow, routing policy, stack selection, and cross-artifact gates
-- `orchestration/`: dynamic tool discovery, script-generation policy, and stop/confirmation rules
-- `artifacts/contracts/`: human-readable artifact contracts, including dataset, evaluator, local-model-profile, and probe evidence rules
-- `artifacts/schemas/`: bundled JSON schemas used by `scripts/validate_contracts.py`, including Phase 2 profile and probe artifacts
-- `training/`: supervision, teacher, verifier, and stack-specific training references
-- `probes/`: capability-aware probe design playbooks used before route selection
-- `data/`: sourcing policy for open datasets, synthetic data, and user-confirmation boundaries
-- `domains/`: consolidated domain playbooks for code, tool use, multimodal, and speech/audio
+## Core routing
 
-This keeps the top-level `references/` directory as a lightweight index instead of a flat dump of every document, while avoiding paired domain files that duplicated routing and evaluator guidance.
+- `routing/`: capability intake, evaluation-first workflow, intervention taxonomy, method selection, research routing, model discovery, training-stack selection, serving-compatibility checks, and cross-plan quality gates
 
-Phase 2 execution support now lives in scripts rather than additional reference sprawl:
+Read this category first for most requests.
 
-- `scripts/local_model_profile.py`: inspect local model metadata, tokenizer facts, and model-card hints before route selection
-- `scripts/run_capability_probes.py`: normalize probe specs plus either captured responses, a backend config, or a legacy command backend into `probe-result` and `probe-summary` artifacts, including compact baseline diagnosis and route-readiness hints
-- `scripts/discover_environment.py`: inspect the active workspace and emit `environment-discovery.json` before selecting reusable data or training surfaces
-- `scripts/emit_generated_script_plan.py`: turn capability, evaluation, and environment artifacts into a project-local scaffold for collection, generation, curation, training, and evaluation
-- `scripts/emit_training_route.py`: emit scaffold-only training route artifacts with normalized route families plus optional bundled implementation profiles, without treating those profiles as the only valid execution path
-- `references/routing/probe-backend-adapters.md`: minimal config shapes for `command` and `openai_compatible_http` execution backends
-- `references/example-runs.md`: concrete command patterns for bootstrap, evidence gathering, route emission, and release smoke testing
+## Orchestration and policy
+
+- `orchestration/`: stop-and-confirmation rules, tool-discovery checks, and guidance for unknown or under-specified requests
+
+Read this when route decisions depend on missing facts, tool boundaries, or explicit user confirmation.
+
+## Public output and examples
+
+- `output-shapes.md`: minimal public planning-bundle shapes
+- `examples/planning-examples.md`: short planning-first examples that show decomposition, evaluation-first moves, route choice, and stop gates
+
+Read these when you need to structure the output or calibrate how detailed the plan should be.
+
+## Evaluation, data, and route depth
+
+- `probes/`: baseline probe design before escalation
+- `data/`: open-data sourcing and data-boundary policy
+- `training/`: supervision shapes and family-specific routing depth such as distillation, PEFT, model editing, merging, continual learning, self-improvement, and retrieval-conditioned tuning
+- `domains/`: domain playbooks for code, tool use, multimodal, and speech/audio
+
+Read these only after the main bottleneck and likely intervention family are clear.
+
+If a `legacy/` directory exists elsewhere in the repo, treat it as historical material rather than part of the public reference surface.
